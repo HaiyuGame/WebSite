@@ -60,3 +60,14 @@ npm test
 
 - 顶部、常见问题和开发者相关文档增加 QQ 反馈群入口：https://qm.qq.com/q/37qXKhoSYE。
 
+
+## 下载与搜索引擎
+
+- Windows 下载弹窗实时查询 GitHub 最新正式 Release，缓存有效期为当前页面内存中的 5 分钟；安装包 URL 限定 HaiyuGame/Haiyu 官方仓库。
+- GitHub、GH-Proxy（gh-proxy.org）、GHFast（ghfast.top）三条下载线路由用户选择。镜像属于第三方服务，不承诺速度或可用性。
+- 版本查询默认直连 GitHub，超时/限流可重试或手动使用镜像查询；不携带 Token。
+- 线路维护位置：src/ReleaseDownloads.jsx 的 downloadRoutes。镜像文档：https://gh-proxy.com/docs/quick-start ，https://ghfast.top/ 。
+- SHA-256 如由 GitHub 返回则显示；网页没有对远端安装包执行本地校验，请用户核对签名和官方校验值。
+- SEO：index.html 包含 description、robots、canonical、Open Graph、Twitter、SoftwareApplication JSON-LD 和可直接读取的静态正文。
+- public/robots.txt 与 public/sitemap.xml 使用正式域名 https://website.haiyu.party/ 。修改域名时一并更新。
+- 当前内容仍为同页标签切换，站点地图仅列真实首页，不列 hash 伪页面。部署后可向搜索引擎站长平台提交 sitemap.xml；收录与排名由搜索引擎决定。

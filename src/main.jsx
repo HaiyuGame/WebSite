@@ -4,6 +4,7 @@ import { FluentProvider, webLightTheme, webDarkTheme, Button, TabList, Tab, Dial
 import { ArrowDownload24Regular, ArrowRight24Regular, WeatherMoon24Regular, WeatherSunny24Regular, Games24Regular, Cloud24Regular, Person24Regular, Wrench24Regular, Code24Regular, Dismiss24Regular, Open24Regular, Phone24Regular, Copy24Regular } from '@fluentui/react-icons';
 import './style.css';
 import AmbientBackground from './AmbientBackground';
+const ReleaseDownloads = lazy(() => import('./ReleaseDownloads').then(m => ({ default: m.ReleaseDownloads })));
 const ReactMarkdown = lazy(() => import('react-markdown'));
 import desktopReadme from './content/desktop-readme.md?raw';
 const readmeSection = (title) => desktopReadme.split('### ' + title)[1]?.split(/\r?\n### |\r?\n---/)[0]?.trim() || '';
@@ -63,7 +64,7 @@ function App() {
  const [download, setDownload] = useState(false);
  const [copied, setCopied] = useState(false);
  useEffect(() => { const sync = () => setPage(readPage()); addEventListener('hashchange', sync); return () => removeEventListener('hashchange', sync); }, []);
- useEffect(() => { document.title = `${pages.find(([id]) => id === page)[1]} · Haiyu`; }, [page]);
+ useEffect(() => { document.title = page === 'desktop' ? 'Haiyu 启动器下载｜鸣潮、战双帕弥什｜Windows 与 Android' : page === 'mobile' ? 'Haiyu Android 手机客户端下载｜库洛游戏工具' : 'Haiyu 开发者文档｜开源库洛游戏启动器 · C# 与 WinUI 3'; }, [page]);
  const go = (id) => { location.hash = id; setPage(id); };
  const toggle = () => { setDark(!dark); localStorage.setItem('haiyu-theme', !dark ? 'dark' : 'light'); };
  const copy = async () => { try { await navigator.clipboard.writeText(`git clone ${repo}.git`); setCopied(true); } catch { setCopied(false); } };
@@ -91,10 +92,12 @@ function App() {
  </section></>}
  </div></main>
  <footer><span>© {new Date().getFullYear()} Haiyu</span><span>独立开源项目，非库洛官方产品。</span><a href={page === 'mobile' ? mobileRepo : repo} target="_blank" rel="noreferrer">GitHub <Open24Regular/></a></footer>
- <Dialog open={download} onOpenChange={(_, d) => setDownload(d.open)}><DialogSurface><DialogBody><DialogTitle action={<Button appearance="subtle" aria-label="关闭下载窗口" icon={<Dismiss24Regular/>} onClick={() => setDownload(false)}/>}>下载 Haiyu</DialogTitle><DialogContent><p className="dialog-description">选择 Windows 客户端的安装方式。系统要求与版本信息见发布页面。</p>{[['Microsoft Store', '通过应用商店安装与更新', 'https://apps.microsoft.com/detail/9p70bt6bvwfh?hl=zh-CN&gl=CN'], ['GitHub Releases', '下载发布包，查看更新记录', repo + '/releases']].map(([title, text, url]) => <a key={title} className="download-option" href={url} target="_blank" rel="noreferrer"><ArrowDownload24Regular/><div><strong>{title}</strong><span>{text}</span></div><Open24Regular/></a>)}</DialogContent><DialogActions><Button onClick={() => {setDownload(false); go('mobile');}}>查看 Android 客户端</Button><Button onClick={() => setDownload(false)}>关闭</Button></DialogActions></DialogBody></DialogSurface></Dialog>
+ <Dialog open={download} onOpenChange={(_, d) => setDownload(d.open)}><DialogSurface className="download-dialog"><DialogBody><DialogTitle action={<Button appearance="subtle" aria-label="关闭下载窗口" icon={<Dismiss24Regular/>} onClick={() => setDownload(false)}/>}>下载 Haiyu</DialogTitle><DialogContent><p className="dialog-description">选择 Windows 客户端的安装方式。系统要求与版本信息见发布页面。</p>{[['Microsoft Store', '通过应用商店安装与更新', 'https://apps.microsoft.com/detail/9p70bt6bvwfh?hl=zh-CN&gl=CN'], ].map(([title, text, url]) => <a key={title} className="download-option" href={url} target="_blank" rel="noreferrer"><ArrowDownload24Regular/><div><strong>{title}</strong><span>{text}</span></div><Open24Regular/></a>)}<Suspense fallback={<p role="status">正在加载下载选项…</p>}><ReleaseDownloads/></Suspense></DialogContent><DialogActions><Button onClick={() => {setDownload(false); go('mobile');}}>查看 Android 客户端</Button><Button onClick={() => setDownload(false)}>关闭</Button></DialogActions></DialogBody></DialogSurface></Dialog>
  </FluentProvider>;
 }
 createRoot(document.getElementById('root')).render(<React.StrictMode><App/></React.StrictMode>);
+
+
 
 
 

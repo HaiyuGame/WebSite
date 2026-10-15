@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://website.haiyu.party/sitemap.xml
